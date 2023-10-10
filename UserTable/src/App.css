@@ -1,0 +1,13 @@
+ion-icon {
+  font-size: 20px;
+  border-radius: 5px;
+}
+
+ion-icon:nth-child(6) {
+  margin: 0 40px;
+  padding: 5px;
+}
+
+ion-icon:hover {
+  background-color: #EDF2F7;
+}

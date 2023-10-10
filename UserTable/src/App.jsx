@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 import Edit from './Edit';
@@ -9,9 +9,10 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(5);
   const [isLoading, setIsLoading] = useState(true);
-  const [name, setName] = useState('');
-  const editRef = useRef(null);
-  const deleteRef = useRef(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const myUser = useRef({});
+  const editUser = useRef({})
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -32,33 +33,39 @@ export default function App() {
   }
 
   const searchUsers = (name) => {
-    setUsers(users.filter((user) => user.name === name))
+    if (name) {
+      setUsers(users.filter((user) => user.name name))
+    }
   }
 
-  const handleEditClick = () => {
-    editRef.current.showModal();
+  const openDelete = (user) => {
+    setShowDeleteModal(true);
+    myUser.current = user;
   }
 
-  const handleDeleteClick = () => {
-    deleteRef.current.showModal();
+  const openEdit = (user) => {
+    setShowEditModal(true);
+    editUser.current = user;
   }
 
   return (
-    <div className='w-full md:w-5/6 mx-auto flex flex-col justify-evenly items-center border border-slate-200 rounded-md'>
+    <div className='w-full md:w-5/6 mx-auto my-auto flex flex-col justify-evenly items-center border border-slate-200 rounded-md'>
       <div className='w-full px-2 py-5 flex flex-row flex-wrap justify-between items-center'>
         <p className='font-sans font-bold text-xl'>Members</p>
-        <form onSubmit={() => searchUsers(name)}>
+        <form>
           <input
             type="text"
             name="name"
             placeholder="search"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => searchUsers(e.target.value)}
             className='w-1200 p-2 border border-slate-500 rounded-md'
           />
         </form>
       </div>
       <div className='w-full overflow-x-auto'>
-        {isLoading ? <p>Loading users' information. Please wait!</p> :
+        {isLoading ? <div className='flex items-center h-200'>
+          <p className='py-6 px-4 text-xs font-medium text-secondary-50 w-full text-center'>Loading users' information. Please wait!</p>
+          </div> :
         <div className='my-2 overflowx-auto'>
           <div className='align-middle inline-block min-w-full'>
             <div className='overflow-hidden border-b border-gray-200'>
@@ -102,11 +109,11 @@ export default function App() {
                       <td className='px-6 py-4 text-sm text-secondary-500 whitespace-nowrap'>
                         <p className="flex items-center text-sky-600">★★★★☆</p>
                       </td>
-                      <td className='px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-8'>
-                        <ion-icon key={user.id} name="trash-outline" onClick={() => handleDeleteClick()}></ion-icon>
-                        <ion-icon key={user.id + 1} name="pencil-sharp" onClick={() => handleEditClick(user.id)}></ion-icon>
-                        <Edit user={user} ref={editRef} />
-                        <Delete user={user} ref={deleteRef} />
+                      <td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
+                        <div key={user.id} id={user.id} className='flex items-center gap-8'>
+                          <ion-icon name="trash-outline" onClick={() => openDelete(user)}></ion-icon>
+                          <ion-icon name="pencil-sharp" onClick={() => openEdit(user)}></ion-icon>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -115,6 +122,18 @@ export default function App() {
             </div>
           </div>
         </div>}
+        <div>
+          <Delete user={myUser.current} users={users} open={showDeleteModal} setUsers={setUsers} onClose={() => {
+            setShowDeleteModal(false);
+            myUser.current = {};
+          }}/>
+          <Edit user={editUser.current} open={showEditModal} onClose={
+            () => {
+              setShowEditModal(false);
+              editUser.current = {};
+            }
+          }/>
+        </div>
       </div>
       <div className="w-full p-10 flex flex-row justify-between items-center">
         <p className='hidden md:inline-block'>page {currentPage} of 2</p>

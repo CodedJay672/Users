@@ -34,8 +34,10 @@ export default function App() {
 
   const searchUsers = (name) => {
     if (name) {
-      setUsers(users.filter((user) => user.name name))
+      setUsers(users.filter((user) => user.name.includes(name)));
     }
+
+    return;
   }
 
   const openDelete = (user) => {

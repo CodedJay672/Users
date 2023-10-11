@@ -11,6 +11,8 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const [search, setSearch] = useState('');
   const myUser = useRef({});
   const editUser = useRef({})
 
@@ -35,9 +37,9 @@ export default function App() {
   const searchUsers = (name) => {
     if (name) {
       setUsers(users.filter((user) => user.name.includes(name)));
+    } else {
+      window.location.reload();
     }
-
-    return;
   }
 
   const openDelete = (user) => {
@@ -50,6 +52,11 @@ export default function App() {
     editUser.current = user;
   }
 
+  const changeChecked = () => {
+    const checkBoxes = document.querySelectorAll('input[type="checkbox"]');
+    checkBoxes.forEach((checkbox) => checkbox.checked = !isChecked);
+  }
+
   return (
     <div className='w-full md:w-5/6 mx-auto my-auto flex flex-col justify-evenly items-center border border-slate-200 rounded-md'>
       <div className='w-full px-2 py-5 flex flex-row flex-wrap justify-between items-center'>
@@ -58,9 +65,13 @@ export default function App() {
           <input
             type="text"
             name="name"
-            defaultValue=""
+            value={search}
             placeholder="search"
-            onChange={(e) => searchUsers(e.target.value)}
+            onChange={(e) => {
+              e.preventDefault();
+              setSearch(e.target.value);
+              searchUsers(e.target.value);
+            }}
             className='w-1200 p-2 border border-slate-500 rounded-md'
           />
         </form>
@@ -76,7 +87,16 @@ export default function App() {
                 <thead className='bg-blue-100'>
                   <tr>
                     <th scope='col' className='px-6 py-3 text-left text-xs font-medium text-secondary-50 flex items-center gap-2'>
-                      <input type="checkbox" name="name" className='py-3 px-4 h-4 w-4 mr-3' />
+                      <input
+                        type="checkbox"
+                        name="name"
+                        className='py-3 px-4 h-4 w-4 mr-3'
+                        checked={isChecked}
+                        onChange={() => {
+                          setIsChecked(!isChecked);
+                          changeChecked();
+                        }}
+                      />
                       <p>Name</p>
                       <ion-icon name="arrow-down-outline"></ion-icon>
                     </th>
@@ -92,7 +112,7 @@ export default function App() {
                     <tr key={user.id}>
                       <td className='py-3 px-6 whitespace-nowrap'>
                         <div className='flex items-center gap-3'>
-                          <input className='h-4 w-4 mr-2' type="checkbox"/>
+                          <input className='h-4 w-4 mr-2' type="checkbox" />
                           <div className='flex-shrink-0 h-10 w-10'>
                             <img loading="lazy" className='rounded-full' height="40" width="40" src="https://placebeard.it/300" alt="disp img" />
                           </div>

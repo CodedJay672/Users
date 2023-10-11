@@ -58,6 +58,7 @@ export default function App() {
           <input
             type="text"
             name="name"
+            defaultValue=""
             placeholder="search"
             onChange={(e) => searchUsers(e.target.value)}
             className='w-1200 p-2 border border-slate-500 rounded-md'
@@ -137,8 +138,7 @@ export default function App() {
           }/>
         </div>
       </div>
-      <div className="w-full p-10 flex flex-row justify-between items-center">
-        <p className='hidden md:inline-block'>page {currentPage} of 2</p>
+      <div className="w-full p-10 flex flex-row justify-between items-center"><p className='hidden md:inline-block'>page {currentPage} of {Math.ceil(users.length / usersPerPage)}</p>
         <div className='w-full md:w-1/5 flex flex-row justify-between'>
           {Array.from({ length: Math.ceil(users.length / usersPerPage) }).map((_, i) => (
             <button key={i} onClick={() => paginate(i + 1)} className='w-2/3 p-2 border border-slate-100 rounded-md hover:bg-blue-100'>

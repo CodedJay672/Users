@@ -68,11 +68,11 @@ export default function App() {
       </div>
       <div className='w-full overflow-x-auto'>
         {isLoading ? <div className='flex items-center h-200'>
-          <p className='py-6 px-4 text-xs font-medium text-secondary-50 w-full text-center'>Loading users' information. Please wait!</p>
+          <p className='py-6 px-4 text-xs font-medium text-secondary-50 w-full text-center min-h-[60vh]'>Loading users' information. Please wait!</p>
           </div> :
         <div className='my-2 overflowx-auto'>
-          <div className='align-middle inline-block min-w-full'>
-            <div className='overflow-hidden border-b border-gray-200 min-h-screen'>
+          <div className='align-middle inline-block min-w-full min-h-[60vh]'>
+            <div className='overflow-hidden border-b border-gray-200'>
               <table className='min-w-full divide-y divide-gray-200'>
                 <thead className='bg-blue-100'>
                   <tr>

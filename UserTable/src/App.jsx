@@ -28,19 +28,10 @@ export default function App() {
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser).sort();
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
-  }
-
-  const searchUsers = (name) => {
-    if (name) {
-      const searchName = name.toLowerCase();
-      setUsers(users.filter((user) => user.name.toLowerCase().includes(searchName)));
-    } else {
-      setUsers(users);
-    }
   }
 
   const openDelete = (user) => {
@@ -81,7 +72,7 @@ export default function App() {
           </div> :
         <div className='my-2 overflowx-auto'>
           <div className='align-middle inline-block min-w-full'>
-            <div className='overflow-hidden border-b border-gray-200'>
+            <div className='overflow-hidden border-b border-gray-200 min-h-screen'>
               <table className='min-w-full divide-y divide-gray-200'>
                 <thead className='bg-blue-100'>
                   <tr>
@@ -166,7 +157,7 @@ export default function App() {
       <div className="w-full p-10 flex flex-row justify-between items-center"><p className='hidden md:inline-block'>page {currentPage} of {Math.ceil(users.length / usersPerPage)}</p>
         <div className='w-full md:w-1/5 flex flex-row justify-between'>
           {Array.from({ length: Math.ceil(users.length / usersPerPage) }).map((_, i) => (
-            <button key={i} onClick={() => paginate(i + 1)} className='w-2/3 p-2 border border-slate-100 rounded-md hover:bg-blue-100'>
+            <button key={i} onClick={() => paginate(i + 1)} className="w-2/3 p-2 border border-slate-100 rounded-md hover:bg-blue-100">
               {i === 0 ? "Previous" : "Next"}
             </button>
           ))}

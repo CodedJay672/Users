@@ -36,9 +36,10 @@ export default function App() {
 
   const searchUsers = (name) => {
     if (name) {
-      setUsers(users.filter((user) => user.name.includes(name)));
+      const searchName = name.toLowerCase();
+      setUsers(users.filter((user) => user.name.toLowerCase().includes(searchName)));
     } else {
-      window.location.reload();
+      setUsers(users);
     }
   }
 
@@ -65,12 +66,10 @@ export default function App() {
           <input
             type="text"
             name="name"
-            value={search}
             placeholder="search"
             onChange={(e) => {
               e.preventDefault();
               setSearch(e.target.value);
-              searchUsers(e.target.value);
             }}
             className='w-1200 p-2 border border-slate-500 rounded-md'
           />
@@ -108,7 +107,13 @@ export default function App() {
                   </tr>
                 </thead>
                 <tbody className='bg-white divide-y divide-gray-200'>
-                  {currentUsers.map((user) => (
+                  {currentUsers.filter(val => {
+                    if (!search) {
+                      return val;
+                    } else if (val.name.toLowerCase().includes(search.toLowerCase())) {
+                      return val;
+                    }
+                  }).map((user) => (
                     <tr key={user.id}>
                       <td className='py-3 px-6 whitespace-nowrap'>
                         <div className='flex items-center gap-3'>

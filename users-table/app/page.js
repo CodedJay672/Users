@@ -135,7 +135,7 @@ export default function UsersTable() {
                         </td>
                         <td className='px-6 py-4 whitespace-nowrap text-sm font-medium'>
                           <div key={user.id} id={user.id} className='flex items-center gap-8'>
-                            <IoTrashOutline onClick={() => openEdit(user)} className='text-secondary-50' />
+                            <IoTrashOutline onClick={() => openDelete(user)} className='text-secondary-50' />
                             <IoPencilSharp onClick={() => openEdit(user)} className='text-secondary-50' />
                           </div>
                         </td>
